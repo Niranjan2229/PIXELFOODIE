@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | PixelFoodie</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700;800&family=Press+Start+2P&display=swap"
+        rel="stylesheet">
+   <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Copyright & Ownership Meta Tags -->
+    <meta name="author" content="NIRANJAN ANANDAN">
+    <meta name="owner" content="NIRANJAN ANANDAN">
+    <meta name="copyright" content="© 2025 PixelFoodie — NIRANJAN ANANDAN. All Rights Reserved.">
+    <meta name="robots" content="index, follow">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="/home" class="logo">PIXELFOODIE</a>
+                <div class="nav-links">
+                    <a href="/home"><i class="fas fa-home"></i> Home</a>
+                    <a href="/recipes.html"><i class="fas fa-utensils"></i> Recipes</a>
+                    <div class="dropdown">
+                        <a href="#" class="dropbtn"><i class="fas fa-fire"></i> Popular <i
+                                class="fas fa-caret-down"></i></a>
+                        <div class="dropdown-content" id="popular-dropdown">
+                            <!-- Dynamic content will be loaded here via script.js -->
+                        </div>
+                    </div>
+                    <a href="/about.html" class="active"><i class="fas fa-info-circle"></i> About</a>
+                    <button id="theme-toggle" class="btn-icon" aria-label="Toggle Theme">
+                        <i class="fas fa-moon icon-moon"></i>
+                        <i class="fas fa-sun icon-sun"></i>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero" style="min-height: 50vh; align-items: start; padding-top: 150px;">
+            <div class="container">
+                <div style="display: flex; align-items: center; gap: 4rem; flex-wrap: wrap; text-align: left;">
+                    <div class="section-title" style="flex: 1; min-width: 300px;">
+                        <h2 style="font-size: 3.5rem; margin-bottom: 0.5rem;">About PixelFoodie</h2>
+                        <p style="font-size: 1.2rem; color: var(--accent);">Where Passion Meets Pixels</p>
+                    </div>
+
+                    <div style="flex: 1; min-width: 300px;">
+                        <p
+                            style="font-size: 1.2rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 1.5rem;">
+                            We bring the flair and flavor of your favorite restaurants straight to your stovetop.
+                        </p>
+                        <p style="font-size: 1.2rem; color: var(--text-muted); line-height: 1.8;">
+                            Our mission is simple: to provide a premium, interactive recipe book that combines clear
+                            written instructions with visual video guides. From first prep to final garnish, we’re with
+                            you every step of the way.
+                        </p>
+                    </div>
+
+                    <div style="flex: 1; min-width: 300px;">
+                        <p style="font-size: 1.2rem; color: var(--text-muted); line-height: 1.8;">
+                            This is a fully integrated webpage with the help of many YouTube Videos and the recipes are all tested by me personally. I have also added an AI recipe finder which is a unique feature of this website. It helps you to find the recipe you want by just entering the name of the dish or the ingredients you have. I have also added a category page where you can find recipes based on different categories like breakfast, lunch, dinner, desserts, etc.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <span class="footer-logo">PIXELFOODIE</span>
+                    <p class="footer-tagline">Where Passion Meets Pixels.</p>
+                </div>
+                <div class="footer-copy">
+                    <p>&copy; <span id="footer-year"></span> <strong>PixelFoodie</strong> &mdash; Created &amp; Owned by
+                        <strong>NIRANJAN ANANDAN</strong></p>
+                    <p class="footer-legal">All content, design, code &amp; assets are the exclusive property of
+                        <strong>NIRANJAN ANANDAN</strong>.<br>Unauthorized copying, redistribution or use is strictly prohibited.</p>
+                    <p class="footer-rights"><i class="fas fa-shield-alt"></i> All Rights Reserved &nbsp;|&nbsp; <i
+                            class="fas fa-lock"></i> Proprietary &amp; Confidential</p>
+                </div>
+            </div>
+        </div>
+        <script>document.getElementById('footer-year').textContent = new Date().getFullYear();</script>
+    </footer>
+
+    <script src="/static/script.js"></script>
+</body>
+
+</html>

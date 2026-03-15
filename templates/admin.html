@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | PixelFoodie</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Normal (light) admin theme - simple, neutral palette */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        :root {
+            --primary: #2B6CB0;
+            /* blue */
+            --secondary: #4A5568;
+            /* slate */
+            --accent: #38A169;
+            /* green */
+            --dark-bg: #F7FAFC;
+            /* page background */
+            --card-bg: #FFFFFF;
+            /* card / table background */
+            --border-color: #E2E8F0;
+            /* light border */
+            --text-main: #1A202C;
+            /* primary text */
+            --text-secondary: #4A5568;
+            /* muted text */
+            --font-heading: 'Inter', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --chart-grid: rgba(0,0,0,0.1);
+        }
+
+        body.dark-theme {
+            --primary: #4299E1;
+            --secondary: #A0AEC0;
+            --accent: #48BB78;
+            --dark-bg: #0F172A;
+            --card-bg: #1E293B;
+            --border-color: #334155;
+            --text-main: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --chart-grid: rgba(255,255,255,0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            padding: 2rem;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            font-family: var(--font-heading);
+            color: var(--text-main);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: none;
+        }
+
+        h2 {
+            font-family: var(--font-heading);
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+            border: 1px solid var(--border-color);
+            margin-bottom: 2.5rem;
+        }
+
+        th,
+        td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
+        }
+
+        th {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-weight: 600;
+            font-family: var(--font-heading);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tr:hover {
+            background: var(--dark-bg);
+            transition: background 0.15s ease;
+        }
+
+        td {
+            color: var(--text-secondary);
+        }
+
+        .tag {
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .tag-local {
+            background: rgba(56, 161, 105, 0.08);
+            color: var(--accent);
+            border: 1px solid rgba(56, 161, 105, 0.12);
+        }
+
+        .tag-file {
+            background: rgba(43, 108, 176, 0.06);
+            color: var(--primary);
+            border: 1px solid rgba(43, 108, 176, 0.08);
+        }
+
+        .btn-logout {
+            float: right;
+            padding: 0.6rem 1.2rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            font-family: var(--font-heading);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-logout:hover {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            transform: translateY(-1px);
+            border-color: var(--primary);
+        }
+
+        .btn-theme {
+            float: right;
+            margin-right: 1rem;
+            padding: 0.6rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: 6px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            font-size: 1.1rem;
+        }
+
+        .btn-theme:hover {
+            background: var(--dark-bg);
+            color: var(--primary);
+            transform: translateY(-1px);
+            border-color: var(--primary);
+        }
+
+        .btn-delete {
+            padding: 6px 10px;
+            background: #FFF5F5;
+            color: #C53030;
+            border: 1px solid rgba(197, 30, 30, 0.08);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .btn-delete:hover:not(:disabled) {
+            background: #FFF1F1;
+            box-shadow: 0 6px 14px rgba(199, 54, 54, 0.06);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-container {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 1.25rem;
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-header {
+            color: var(--text-secondary);
+            font-family: var(--font-heading);
+            margin-bottom: 0.8rem;
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+        hr {
+            border: none;
+            height: 1px;
+            background: var(--border-color);
+            margin: 2rem 0;
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+        <button class="btn-logout" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+        <button class="btn-theme" id="themeToggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+            <i class="fas fa-moon"></i>
+        </button>
+        <h1>Admin Dashboard</h1>
+
+        <div class="dashboard-grid">
+            <div class="chart-container">
+                <div class="chart-header">User Engagement (Time Spent)</div>
+                <canvas id="timeChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-header">Top Recipes Viewed</div>
+                <canvas id="recipeChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-header">Quick Stats</div>
+                <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: calc(100% - 2rem);">
+                    <div style="font-size:4rem; font-weight:700; color:var(--text-main); margin-bottom:0.5rem;" id="totalUsersCount">0</div>
+                    <div style="color:var(--text-secondary); font-size: 1.1rem; font-weight: 500;">Total Users</div>
+                </div>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Email</th>
+                    <th>Password (Hash/Plain)</th>
+                    <th>Source</th>
+                    <th>Joined</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="userTable">
+                <!-- Data populated by JS -->
+            </tbody>
+        </table>
+
+        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 3rem 0;">
+
+        <h2 style="font-family: var(--font-heading); color: var(--primary); margin-bottom: 1.5rem; font-size: 1.5rem;">
+            Downloaded Recipes by User</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>User Email</th>
+                    <th>Recipe Name</th>
+                    <th>Recipe ID</th>
+                    <th>Download Date</th>
+                </tr>
+            </thead>
+            <tbody id="downloadsTable">
+                <!-- Data populated by JS -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Load Data -->
+    <script src="data/users.js"></script>
+    <script src="data/recipes.js"></script>
+
+    <script>
+        // 1. Auth Gate
+        const isAdmin = sessionStorage.getItem('pixelFoodie_role') === 'admin';
+        if (!isAdmin) {
+            window.location.href = 'login.html';
+        }
+
+        function logout() {
+            sessionStorage.clear();
+            window.location.href = 'login.html';
+        }
+
+        // --- Theme Logic ---
+        function toggleTheme() {
+            const body = document.body;
+            body.classList.toggle('dark-theme');
+            const isDark = body.classList.contains('dark-theme');
+            localStorage.setItem('pixelFoodie_admin_theme', isDark ? 'dark' : 'light');
+            updateThemeIcon(isDark);
+            
+            // Re-render charts with new theme colors
+            renderTable();
+        }
+
+        function updateThemeIcon(isDark) {
+            const icon = document.querySelector('#themeToggle i');
+            if (icon) {
+                icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+            }
+        }
+
+        // Init Theme
+        (function initTheme() {
+            const savedTheme = localStorage.getItem('pixelFoodie_admin_theme');
+            const isDark = savedTheme === 'dark';
+            if (isDark) {
+                document.body.classList.add('dark-theme');
+            }
+            updateThemeIcon(isDark);
+        })();
+
+        // Global Chart Vars
+        let myChart = null;
+        let pieChart = null;
+        let allUsers = [];
+
+        // 2. Load Data Helper
+        function deleteUser(email) {
+            if (confirm("Are you sure you want to delete user " + email + "? This cannot be undone.")) {
+                localStorage.removeItem('user_' + email);
+                localStorage.removeItem('time_spent_' + email);
+                renderTable(); // Refresh the list
+            }
+        }
+
+        function loadUsers() {
+            const users = [];
+
+            // Add File Users (from data/users.js)
+            if (typeof FILE_USERS !== 'undefined') {
+                FILE_USERS.forEach(u => {
+                    users.push({ ...u, source: 'System (Hardcoded)' });
+                });
+            }
+
+            // Add LocalStorage Users
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('user_')) {
+                    try {
+                        const u = JSON.parse(localStorage.getItem(key));
+                        users.push({ ...u, source: 'Registered (Local)' });
+                    } catch (e) {
+                        console.error("Error parsing user", key);
+                    }
+                }
+            }
+            return users;
+        }
+
+        // 3. Render Table
+        function renderTable() {
+            const tableBody = document.getElementById('userTable');
+            if (!tableBody) return; // Guard clause
+
+            allUsers = loadUsers(); // Refresh data
+            tableBody.innerHTML = '';
+
+            // Arrays for Chart
+            const labels = [];
+            const timeData = [];
+
+            allUsers.forEach((user, index) => {
+                const row = document.createElement('tr');
+                const sourceClass = user.source.includes('Local') ? 'tag-local' : 'tag-file';
+                const isLocal = user.source.includes('Local');
+
+                // Tracked Time Logic
+                let seconds = 0;
+                if (user.email === 'guest') {
+                    seconds = parseFloat(localStorage.getItem('time_spent_guest')) || 0;
+                } else {
+                    let key = 'time_spent_' + user.email;
+                    seconds = parseFloat(localStorage.getItem(key)) || 0;
+                }
+
+                // Convert to minutes
+                const minutes = Math.floor(seconds / 60);
+
+                // Add to Chart Data
+                let displayName = user.name || (user.email ? user.email.split('@')[0] : 'Unknown');
+                labels.push(displayName);
+                timeData.push(minutes);
+
+                // Delete Button HTML
+                // Note: Escaping email quotes for safety
+                const safeEmail = user.email ? user.email.replace(/'/g, "\\'") : '';
+                const deleteBtnHtml = isLocal
+                    ? `<button class="btn-delete" onclick="deleteUser('${safeEmail}')">Delete</button>`
+                    : `<button class="btn-delete" style="opacity:0.5; cursor:not-allowed;" title="Cannot delete system users" disabled>System</button>`;
+
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${user.email || 'N/A'}</td>
+                    <td>${user.password || '****'}</td>
+                    <td><span class="tag ${sourceClass}">${user.source}</span></td>
+                    <td>${new Date().toLocaleDateString()}</td>
+                    <td>${deleteBtnHtml}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            // Update Stats
+            const totalCountEl = document.getElementById('totalUsersCount');
+            if (totalCountEl) totalCountEl.textContent = allUsers.length;
+
+            // Render Time Chart
+            renderTimeChart(labels, timeData);
+
+            // Render Pie Chart
+            renderPieChart();
+
+            // Render Downloads Table
+            renderDownloadsTable();
+        }
+
+        // 3b. Render Downloads Table
+        function renderDownloadsTable() {
+            const downloadsTableBody = document.getElementById('downloadsTable');
+            if (!downloadsTableBody) return; // Guard clause
+
+            downloadsTableBody.innerHTML = '';
+            let downloadCount = 0;
+
+            // Iterate through all users to find their downloads
+            allUsers.forEach(user => {
+                const downloadsKey = 'pixelFoodie_downloads_' + user.email;
+                const downloads = JSON.parse(localStorage.getItem(downloadsKey) || '[]');
+
+                downloads.forEach(download => {
+                    downloadCount++;
+                    const row = document.createElement('tr');
+
+                    const downloadDate = new Date(download.downloadDate);
+                    const formattedDate = downloadDate.toLocaleString();
+
+                    row.innerHTML = `
+                        <td>${downloadCount}</td>
+                        <td>${user.email}</td>
+                        <td>${download.recipeTitle}</td>
+                        <td>${download.recipeId}</td>
+                        <td>${formattedDate}</td>
+                    `;
+                    downloadsTableBody.appendChild(row);
+                });
+            });
+
+            // If no downloads, show message
+            if (downloadCount === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-muted);">No downloads yet</td>`;
+                downloadsTableBody.appendChild(row);
+            }
+        }
+
+        // 4. Initial Render
+        renderTable();
+
+        // --- Chart Implementations ---
+
+        function renderTimeChart(labels, dataPoints) {
+            const ctx = document.getElementById('timeChart').getContext('2d');
+
+            // Destroy existing chart if it exists
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Time Spent (Minutes)',
+                        data: dataPoints,
+                        backgroundColor: 'rgba(255, 71, 87, 0.6)',
+                        borderColor: '#FF4757',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: getComputedStyle(document.body).getPropertyValue('--text-secondary').trim() },
+                            grid: { color: getComputedStyle(document.body).getPropertyValue('--chart-grid').trim() }
+                        },
+                        x: {
+                            ticks: { color: getComputedStyle(document.body).getPropertyValue('--text-secondary').trim() },
+                            grid: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: { color: getComputedStyle(document.body).getPropertyValue('--text-secondary').trim(), font: { size: 12 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderPieChart() {
+            const ctx = document.getElementById('recipeChart').getContext('2d');
+
+            // Get Views from LocalStorage
+            const views = JSON.parse(localStorage.getItem('pixelFoodie_recipeViews') || '{}');
+
+            // Process Data: Sort by views desc
+            // We need recipe titles. recipes array is from recipes.js
+            let sortedRecipes = [];
+
+            Object.keys(views).forEach(id => {
+                const count = views[id];
+                const recipe = recipes.find(r => r.id == id);
+                if (recipe) {
+                    sortedRecipes.push({
+                        title: recipe.title,
+                        count: count
+                    });
+                }
+            });
+
+            // Sort Descending
+            sortedRecipes.sort((a, b) => b.count - a.count);
+
+            // Take Top 5
+            const top5 = sortedRecipes.slice(0, 5);
+
+            const pieLabels = top5.map(item => item.title);
+            const pieData = top5.map(item => item.count);
+
+            // Fallback if no data
+            if (pieLabels.length === 0) {
+                pieLabels.push('No Data');
+                pieData.push(1); // placeholder
+            }
+
+            if (pieChart) {
+                pieChart.destroy();
+            }
+
+            pieChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: pieLabels,
+                    datasets: [{
+                        data: pieData,
+                        backgroundColor: [
+                            '#FF4757',
+                            '#2ed573',
+                            '#ffa502',
+                            '#3742fa',
+                            '#5352ed',
+                            '#7f8fa6'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                color: '#1A202C',
+                                font: { size: 11.5, family: 'Inter, sans-serif' },
+                                padding: 12,
+                                boxWidth: 14,
+                                boxHeight: 14,
+                                usePointStyle: true,
+                                pointStyle: 'rectRounded'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    const label = context.label || '';
+                                    const value = context.parsed || 0;
+                                    return ` ${label}: ${value} view${value !== 1 ? 's' : ''}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

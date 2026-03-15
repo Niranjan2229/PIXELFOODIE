@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | PixelFoodie</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Copyright & Ownership Meta Tags -->
+    <meta name="author" content="NIRANJAN ANANDAN">
+    <meta name="owner" content="NIRANJAN ANANDAN">
+    <meta name="copyright" content="© 2025 PixelFoodie — NIRANJAN ANANDAN. All Rights Reserved.">
+    <meta name="robots" content="index, follow">
+    <style>
+        :root {
+            --primary: #FF4757;
+            --dark-bg: #121212;
+            --card-bg: #1E1E1E;
+            --text-main: #FFFFFF;
+            --text-muted: #A4A4A4;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Video Background */
+        .video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            transform: scale(1.5);
+            /* Strong zoom to eliminate any baked-in bars */
+            z-index: -2;
+        }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            /* Lighter overlay to let video shine */
+            z-index: -1;
+            /* Removed global blur so the video is crisp */
+        }
+
+        .login-card {
+            background: rgba(20, 20, 20, 0.45);
+            /* Semi-transparent dark bg */
+            padding: 3rem;
+            border-radius: 24px;
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            backdrop-filter: blur(20px);
+            /* The frosted glass effect */
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            /* Glass border */
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, var(--primary), #FFA502);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            font-size: 1rem;
+            font-family: var(--font-heading);
+            /* Match the logo font */
+        }
+
+        .google-btn {
+            background: white;
+            color: #1f1f1f;
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 50px;
+            border: none;
+            font-family: 'Roboto', sans-serif;
+            /* Standard Google font usually, sticking to body font here */
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .google-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+        }
+
+        .google-btn img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .divider {
+            margin: 2rem 0;
+            position: relative;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .input-group {
+            margin-bottom: 0.8rem;
+            text-align: left;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            color: #121212;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s ease;
+            font-weight: 500;
+        }
+
+        .login-input:focus {
+            background: #fff;
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(255, 71, 87, 0.3);
+        }
+
+        .enter-btn {
+            background: linear-gradient(135deg, var(--primary), #FF6B81);
+            color: white;
+            width: 100%;
+            padding: 1rem;
+            border-radius: 12px;
+            border: none;
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            box-shadow: 0 10px 20px rgba(255, 71, 87, 0.3);
+        }
+
+        .enter-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(255, 71, 87, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .google-btn {
+            background: white;
+            color: #1f1f1f;
+            width: 100%;
+            padding: 0.9rem;
+            border-radius: 12px;
+            border: none;
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: all 0.2s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .google-btn:hover {
+            transform: translateY(-2px);
+            background: #f8f9fa;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .facebook-btn {
+            background: #1877F2;
+            color: white;
+            width: 100%;
+            padding: 0.9rem;
+            border-radius: 12px;
+            border: none;
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: all 0.2s ease;
+            box-shadow: 0 5px 15px rgba(24, 119, 242, 0.2);
+            margin-top: 0.8rem;
+        }
+
+        .facebook-btn:hover {
+            transform: translateY(-2px);
+            background: #166fe5;
+            box-shadow: 0 8px 20px rgba(24, 119, 242, 0.3);
+        }
+
+        .skip-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--text-muted);
+            padding: 0.7rem 2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+
+        .skip-btn:hover {
+            border-color: var(--text-main);
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .divider {
+            margin: 1.5rem 0;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            position: relative;
+        }
+
+        .divider::before,
+        .divider::after {
+            width: 42%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .mobile-only {
+            display: none;
+        }
+
+        /* Google Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(2px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .google-card {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            font-family: 'Roboto', sans-serif;
+            color: #3c4043;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .g-header {
+            padding: 2rem 2rem 1rem;
+            text-align: center;
+        }
+
+        .g-logo {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 0.5rem;
+        }
+
+        .g-title {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #202124;
+        }
+
+        .g-subtitle {
+            font-size: 0.9rem;
+            color: #5f6368;
+        }
+
+        .g-list {
+            list-style: none;
+            border-top: 1px solid #dadce0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .g-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            border-bottom: 1px solid #f1f3f4;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .g-item:hover {
+            background: #f5f8ff;
+        }
+
+        .g-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #9333ea;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-right: 1rem;
+        }
+
+        .g-info {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .g-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #3c4043;
+        }
+
+        .g-email {
+            font-size: 0.8rem;
+            color: #5f6368;
+        }
+
+        .g-footer {
+            padding: 1rem 2rem;
+            text-align: center;
+            border-top: 1px solid #dadce0;
+        }
+
+        .g-btn-close {
+            background: none;
+            border: none;
+            color: #1a73e8;
+            cursor: pointer;
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+
+    <video autoplay muted loop playsinline class="video-bg" id="bgVideo">
+        <source src="assets/loginpage2.mp4" type="video/mp4">
+        <!-- Fallback image if video fails -->
+        <img src="assets/hero_food_platter.png" alt="Background" style="width:100%; height:100%; object-fit:cover;">
+    </video>
+    <div class="bg-overlay"></div>
+
+    <div class="login-card">
+        <h1 class="logo">PIXELFOODIE</h1>
+        <p class="subtitle">Master the art of the professional kitchen.</p>
+
+        <div class="input-group">
+            <input type="text" id="email" placeholder="Email or Phone Number" class="login-input">
+        </div>
+        <div class="input-group">
+            <input type="password" id="password" placeholder="Password" class="login-input">
+        </div>
+
+        <div style="text-align: left; margin-bottom: 0.5rem; margin-top: -0.5rem;">
+            <a href="forgot-password.html"
+                style="color: var(--text-muted); font-size: 0.85rem; text-decoration: none; transition: color 0.3s;"
+                onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'">
+                Forgot Password?
+            </a>
+        </div>
+
+        <button class="enter-btn" onclick="handleEmailLogin(this)">
+            Log In
+        </button>
+
+        <div class="divider"><span>OR</span></div>
+
+        <button class="google-btn" onclick="handleGoogleLogin(this)">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google">
+            Continue with Google
+        </button>
+
+        <button class="facebook-btn" onclick="handleFacebookLogin(this)">
+            <i class="fab fa-facebook" style="font-size: 1.2rem;"></i>
+            Continue with Facebook
+        </button>
+
+
+
+        <div class="toggle-link" style="margin-top: 1.5rem; font-size: 0.9rem; color: #A4A4A4;">
+            Don't have an account? <span onclick="toggleMode()" id="toggleBtn"
+                style="color: var(--primary); font-weight: 600; cursor: pointer;">Sign Up</span>
+        </div>
+    </div>
+
+    <!-- Google User Modal (Simulated) -->
+    <div class="modal-overlay" id="googleModal">
+        <div class="google-card">
+            <div class="g-header">
+                <svg class="g-logo" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                        fill="#4285F4" />
+                    <path
+                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                        fill="#34A853" />
+                    <path
+                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.26.81-.58z"
+                        fill="#FBBC05" />
+                    <path
+                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                        fill="#EA4335" />
+                </svg>
+                <div class="g-title" id="authModalTitle">Sign in with Google</div>
+                <div class="g-subtitle" id="authModalSubtitle">Choose an account to continue to PixelFoodie</div>
+            </div>
+            <ul class="g-list">
+                <!-- Simulated Account 1 -->
+                <li class="g-item" onclick="handleSimulatedLogin('Niranjan', 'niranjan@gmail.com')">
+                    <div class="g-avatar" style="background:#1a73e8; color:white;">N</div>
+                    <div class="g-info">
+                        <span class="g-name">Niranjan</span>
+                        <span class="g-email">niranjan@gmail.com</span>
+                    </div>
+                </li>
+                <!-- Simulated Account 2 -->
+                <li class="g-item" onclick="handleSimulatedLogin('Guest User', 'guest@example.com')">
+                    <div class="g-avatar" style="background:#e37400; color:white;">G</div>
+                    <div class="g-info">
+                        <span class="g-name">Guest User</span>
+                        <span class="g-email">guest@example.com</span>
+                    </div>
+                </li>
+                <!-- Use Another Account Option -->
+                <li class="g-item" onclick="handleGuestLogin(this)">
+                    <div class="g-avatar" style="background:#fff; color:#5f6368; border:1px solid #dadce0"><i
+                            class="fas fa-user-circle"></i></div>
+                    <div class="g-info">
+                        <span class="g-name">Use another account</span>
+                    </div>
+                </li>
+            </ul>
+            <div class="g-footer">
+                <button class="g-btn-close" onclick="closeGoogleModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Users from File -->
+    <script src="data/users.js"></script>
+
+    <script>
+        let isSignUpMode = false;
+
+        function toggleMode() {
+            isSignUpMode = !isSignUpMode;
+            const title = document.querySelector('.logo');
+            const subtitle = document.querySelector('.subtitle');
+            const enterBtn = document.querySelector('.enter-btn');
+            const toggleBtn = document.getElementById('toggleBtn');
+            const toggleText = document.querySelector('.toggle-link');
+
+            if (isSignUpMode) {
+                subtitle.textContent = "Create an account to get started.";
+                enterBtn.textContent = "Sign Up";
+                toggleText.innerHTML = `Already have an account? <span onclick="toggleMode()" id="toggleBtn" style="color: var(--primary); font-weight: 600; cursor: pointer;">Login</span>`;
+            } else {
+                subtitle.textContent = "Master the art of the professional kitchen.";
+                enterBtn.textContent = "Enter";
+                toggleText.innerHTML = `Don't have an account? <span onclick="toggleMode()" id="toggleBtn" style="color: var(--primary); font-weight: 600; cursor: pointer;">Sign Up</span>`;
+            }
+        }
+
+        function handleEmailLogin(btn) {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (!email || !password) {
+                alert("Please enter both email and password.");
+                return;
+            }
+
+            if (isSignUpMode) {
+                // Check if user already exists in LocalStorage or File
+                const storedUser = localStorage.getItem('user_' + email);
+                const fileUser = typeof FILE_USERS !== 'undefined' ? FILE_USERS.find(u => u.email === email) : null;
+
+                if (storedUser || fileUser) {
+                    alert("Account already exists! Please login.");
+                    toggleMode(); // Switch to login
+                    return;
+                }
+
+                // Save new user to LocalStorage
+                const userData = { email, password };
+                localStorage.setItem('user_' + email, JSON.stringify(userData));
+
+                alert("Account created successfully! Please login.");
+                toggleMode(); // Switch to login to force them to use credentials
+
+                // Clear inputs
+                document.getElementById('email').value = '';
+                document.getElementById('password').value = '';
+
+            } else {
+                // Login Mode
+
+                // --- ADMIN CHECK ---
+                if (email === 'admin@pixelfoodie.com' && password === 'admin_2229') {
+                    sessionStorage.setItem('pixelFoodie_auth', 'true');
+                    sessionStorage.setItem('pixelFoodie_role', 'admin');
+                    sessionStorage.setItem('pixelFoodie_email', email);
+                    window.location.href = 'admin.html';
+                    return;
+                }
+                // -------------------
+
+                // 1. Check LocalStorage
+                let user = null;
+                const storedUser = localStorage.getItem('user_' + email);
+                if (storedUser) {
+                    user = JSON.parse(storedUser);
+                }
+
+                // 2. Check File Database (if not found in local)
+                if (!user && typeof FILE_USERS !== 'undefined') {
+                    const fileUser = FILE_USERS.find(u => u.email === email);
+                    if (fileUser) {
+                        user = fileUser;
+                    }
+                }
+
+                if (!user) {
+                    alert("Account not found. Please Sign Up first.");
+                    return;
+                }
+
+                if (user.password !== password) {
+                    alert("Incorrect Password. Please try again.");
+                    return;
+                }
+
+                // Success
+                sessionStorage.setItem('pixelFoodie_email', user.email);
+                completeLogin(btn, '<i class="fas fa-circle-notch fa-spin"></i> Logging in...', false);
+            }
+        }
+
+        function handleGoogleLogin(btn) {
+            document.getElementById('authModalTitle').textContent = "Sign in with Google";
+            document.getElementById('authModalSubtitle').textContent = "Choose an account to continue to PixelFoodie";
+            document.getElementById('googleModal').classList.add('show');
+        }
+
+        function handleFacebookLogin(btn) {
+            document.getElementById('authModalTitle').textContent = "Sign in with Facebook";
+            document.getElementById('authModalSubtitle').textContent = "Select your profile to continue to PixelFoodie";
+            document.getElementById('googleModal').classList.add('show');
+        }
+
+        function closeGoogleModal() {
+            document.getElementById('googleModal').classList.remove('show');
+        }
+
+        function handleGuestLogin(btn) {
+            sessionStorage.setItem('pixelFoodie_email', 'guest');
+            completeLogin(btn, '<i class="fas fa-circle-notch fa-spin"></i> Entering...', true);
+        }
+
+        function completeLogin(btnElement, loadingText, isGuest) {
+            sessionStorage.setItem('pixelFoodie_auth', 'true');
+            if (btnElement) {
+                const originalText = btnElement.innerHTML;
+                btnElement.innerHTML = loadingText;
+                btnElement.style.pointerEvents = 'none';
+            }
+            setTimeout(() => {
+                window.location.href = "/";;
+            }, 1000);
+        }
+
+
+
+        // --- Google Sign-In Handler ---
+        function handleCredentialResponse(response) {
+            // (Code removed as we are reverting to simulation)
+        }
+
+        // Handle Simulated Google Login (Mock)
+        function handleSimulatedLogin(name, email) {
+            sessionStorage.setItem('pixelFoodie_auth', 'true');
+            sessionStorage.setItem('pixelFoodie_email', email);
+            sessionStorage.setItem('pixelFoodie_user', JSON.stringify({
+                email: email,
+                name: name,
+                picture: '' // Could add mock image URL
+            }));
+
+            // Show loading state visually if needed, but for now just redirect
+           window.location.href = "/";
+        }
+
+        function decodeJwtResponse(token) {
+            // (Helper function kept if we switch back or for reference, but unused now)
+        }
+    </script>
+    <!-- Chatbot UI -->
+    <div class="chat-toggle-btn" onclick="toggleChat()">
+        <i class="fas fa-robot"></i>
+    </div>
+
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <div class="chat-title">
+                <i class="fas fa-robot"></i> PixelBot AI
+            </div>
+            <button class="close-chat" onclick="toggleChat()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-message bot-msg">
+                Hello! I'm PixelBot. Ask me about logging in or our recipes!
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Ask a question..." onkeypress="handleUserMessage(event)">
+            <button class="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- Chatbot Styles -->
+    <style>
+        .chat-toggle-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), #FF6B81);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(255, 71, 87, 0.6);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1001;
+            animation: pulse-robot 2s infinite;
+        }
+
+        .chat-toggle-btn:hover {
+            transform: scale(1.1) rotate(10deg);
+        }
+
+        @keyframes pulse-robot {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 20px rgba(255, 71, 87, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 71, 87, 0);
+            }
+        }
+
+        .chat-window {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 350px;
+            height: 500px;
+            background: #1E1E1E;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform-origin: bottom right;
+            transform: scale(0);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1001;
+        }
+
+        .chat-window.active {
+            transform: scale(1);
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .chat-header {
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-title {
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary);
+        }
+
+        .close-chat {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: 0.2s;
+        }
+
+        .close-chat:hover {
+            color: white;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* Scrollbar styling for chat */
+        .chat-messages::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 10px;
+        }
+
+        .chat-message {
+            max-width: 80%;
+            padding: 0.8rem 1rem;
+            border-radius: 18px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            animation: fadeIn 0.3s;
+        }
+
+        .bot-msg {
+            background: rgba(255, 255, 255, 0.1);
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+            color: #ccc;
+        }
+
+        .user-msg {
+            background: var(--primary);
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+            color: white;
+        }
+
+        .chat-input-area {
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            gap: 10px;
+        }
+
+        #chatInput {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 0.8rem;
+            border-radius: 25px;
+            color: white;
+            outline: none;
+        }
+
+        .send-btn {
+            background: var(--primary);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Typing Dots Animation */
+        .typing span {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: #ccc;
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out both;
+            margin: 0 2px;
+        }
+
+        .typing span:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .typing span:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes typing {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0);
+            }
+
+            40% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── CTA Buttons inside bot messages ── */
+        .bot-cta-btn {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 0.45rem 0.9rem;
+            background: linear-gradient(135deg, var(--primary), #FF6B81);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.35);
+        }
+
+        .bot-cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 71, 87, 0.5);
+            filter: brightness(1.1);
+        }
+
+        /* ── Keyboard shortcut styling ── */
+        .bot-msg kbd {
+            display: inline-block;
+            padding: 1px 6px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-family: monospace;
+            color: #eee;
+        }
+    </style>
+
+    <!-- Load Chatbot Logic -->
+    <script src="data/recipes.js"></script>
+    <script src="chatbot.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+{
+    "rewrites": [
+        {
+            "source": "/recipe-detail",
+            "destination": "/recipe-detail.html"
+        },
+        {
+            "source": "/recipes",
+            "destination": "/recipes.html"
+        },
+        {
+            "source": "/categories",
+            "destination": "/categories.html"
+        },
+        {
+            "source": "/category-results",
+            "destination": "/category-results.html"
+        },
+        {
+            "source": "/about",
+            "destination": "/about.html"
+        },
+        {
+            "source": "/login",
+            "destination": "/login.html"
+        },
+        {
+            "source": "/admin",
+            "destination": "/admin.html"
+        },
+        {
+            "source": "/forgot-password",
+            "destination": "/forgot-password.html"
+        }
+    ]
+}

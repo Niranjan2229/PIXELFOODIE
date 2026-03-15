@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PixelFoodie | Premium Recipes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="author" content="NIRANJAN ANANDAN">
+    <meta name="owner" content="NIRANJAN ANANDAN">
+    <meta name="copyright" content="© 2025 PixelFoodie — NIRANJAN ANANDAN. All Rights Reserved.">
+    <meta name="robots" content="index, follow">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">PIXELFOODIE</a>
+                <div class="nav-links">
+                    <a href="#" class="active"><i class="fas fa-home"></i> Home</a>
+                    <a href="recipes.html"><i class="fas fa-utensils"></i> Recipes</a>
+                    <div class="dropdown">
+                        <a href="#" class="dropbtn"><i class="fas fa-fire"></i> Popular <i
+                                class="fas fa-caret-down"></i></a>
+                        <div class="dropdown-content" id="popular-dropdown">
+                        </div>
+                    </div>
+                    <a href="about.html"><i class="fas fa-info-circle"></i> About</a>
+                    <button id="theme-toggle" class="btn-icon" aria-label="Toggle Theme">
+                        <i class="fas fa-moon icon-moon"></i>
+                        <i class="fas fa-sun icon-sun"></i>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container" style="display:flex; width:100%; align-items:center;">
+                <div class="hero-content">
+    <span class="hero-tag">THE GOLD STANDARD RECIPES</span>
+    <h1>Taste the Magic of <br><span>Pixel Perfect</span> Food</h1>
+    <p>Master the art of the professional kitchen. Discover authentic restaurant secrets and time-honored recipes delivered to your table.</p>
+    
+    <div class="hero-actions" style="display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
+        <a href="#recipes" class="btn btn-primary">Explore Recipes</a>
+        
+        <button onclick="openAI()" class="btn btn-primary">✨ Try AI Recipe Finder</button>
+        
+        <a href="http://127.0.0.1:5000" target="_blank" class="btn btn-primary" style="text-decoration: none;">
+            🧠 AI Ingredient Matcher
+        </a>
+    </div>
+</div>
+                <div class="hero-image">
+                    <div class="hero-img-inner">
+                        <img src="assets/pixel_foodie_hero.jpg" alt="PixelFoodie Hero Logo"
+                            onerror="this.src='https://placehold.co/600x600/1E1E1E/FFF?text=PixelFoodie+Hero'">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="recipes" class="recipes-section">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-title">
+                        <h2>Featured Recipes</h2>
+                        <p>Hand-picked recipes just for you</p>
+                    </div>
+                    <div class="search-bar">
+                        <input type="text" id="searchInput" placeholder="Search recipes...">
+                        <button id="voiceSearchBtn" class="btn-icon" aria-label="Voice Search"
+                            style="margin-right: 5px;">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                        <span style="font-size: 1.2rem; cursor: pointer;">🔍</span>
+                    </div>
+                </div>
+
+                <div class="recipe-grid" id="recipeGrid">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <span class="footer-logo">PIXELFOODIE</span>
+                    <p class="footer-tagline">Master the art of the professional kitchen.</p>
+                </div>
+                <div class="footer-copy">
+                    <p>&copy; <span id="footer-year"></span> <strong>PixelFoodie</strong> &mdash; Created &amp; Owned by
+                        <strong>NIRANJAN ANANDAN</strong>
+                    </p>
+                    <p class="footer-legal">All content, design, code &amp; assets are the exclusive property of
+                        NIRANJAN ANANDAN.<br>Unauthorized copying, redistribution or use is strictly prohibited.</p>
+                    <p class="footer-rights"><i class="fas fa-shield-alt"></i> All Rights Reserved &nbsp;|&nbsp; <i
+                            class="fas fa-lock"></i> Proprietary &amp; Confidential</p>
+                    <div id="ai-modal"
+                        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; justify-content:center; align-items:center;">
+                        <div
+                            style="position:relative; width:90%; max-width:450px; background:#1c1c1e; border-radius:20px; padding:15px;">
+                            <button onclick="closeAI()"
+                                style="position:absolute; right:15px; top:15px; color:white; background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
+                            <iframe src="https://pixelfoodie-ml-api-1.onrender.com" width="100%" height="600px"
+                                style="border:none; border-radius:15px;"></iframe>
+                        </div>
+                    </div>
+                    <script>
+                        function openAI() { document.getElementById('ai-modal').style.display = 'flex'; }
+                        function closeAI() { document.getElementById('ai-modal').style.display = 'none'; }
+                    </script>
+                </div>
+            </div>
+        </div>
+        <script>document.getElementById('footer-year').textContent = new Date().getFullYear();</script>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

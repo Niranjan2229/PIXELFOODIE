@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category Results | PixelFoodie</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Copyright & Ownership Meta Tags -->
+    <meta name="author" content="NIRANJAN ANANDAN">
+    <meta name="owner" content="NIRANJAN ANANDAN">
+    <meta name="copyright" content="© 2025 PixelFoodie — NIRANJAN ANANDAN. All Rights Reserved.">
+    <meta name="robots" content="index, follow">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">PIXELFOODIE</a>
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="recipes.html" class="active">Recipes</a>
+                    <div class="dropdown">
+                        <a href="#" class="dropbtn" style="color: var(--text-muted); font-weight: 500;">Popular <i
+                                class="fas fa-caret-down"></i></a>
+                        <div class="dropdown-content">
+                            <a href="recipe-detail.html?id=18">Iffa Chicken (5.0 ★)</a>
+                            <a href="recipe-detail.html?id=5">Spicy Fish Fry (4.9 ★)</a>
+                            <a href="recipe-detail.html?id=7">Butter Chicken (4.9 ★)</a>
+                            <a href="recipe-detail.html?id=1">Blueberry Pancakes (4.8 ★)</a>
+                        </div>
+                    </div>
+                    <a href="about.html">About</a>
+                    <button id="theme-toggle" class="btn-icon" aria-label="Toggle Theme">
+                        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container" style="padding-top: 120px; padding-bottom: 5rem;">
+            <div class="section-header" style="text-align: center; margin-bottom: 3rem;">
+                <h2 id="result-title"
+                    style="font-size: 2.5rem; color: var(--primary); font-family: var(--font-heading);">Recipes</h2>
+                <div
+                    style="width: 60px; height: 4px; background: var(--accent); margin: 0.5rem auto 0; border-radius: 2px;">
+                </div>
+                <p id="result-count" style="color: var(--text-muted); margin-top: 1rem;">Showing results</p>
+            </div>
+
+            <div id="recipes-grid" class="recipe-grid">
+                <!-- Recipes will be injected here via JS -->
+            </div>
+
+            <div id="no-results" style="text-align: center; display: none; padding: 2rem;">
+                <p style="font-size: 1.2rem; color: var(--text-muted);">No recipes found for this category yet.</p>
+                <a href="recipes.html" class="btn btn-primary" style="margin-top: 1rem;">View All Categories</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <span class="footer-logo">PIXELFOODIE</span>
+                    <p class="footer-tagline">Master the art of the professional kitchen.</p>
+                </div>
+                <div class="footer-copy">
+                    <p>&copy; <span id="footer-year"></span> <strong>PixelFoodie</strong> &mdash; Created &amp; Owned by
+                        <strong>NIRANJAN ANANDAN</strong>
+                    </p>
+                    <p class="footer-legal">All content, design, code &amp; assets are the exclusive property of
+                        NIRANJAN ANANDAN.<br>Unauthorized copying, redistribution or use is strictly prohibited.</p>
+                    <p class="footer-rights"><i class="fas fa-shield-alt"></i> All Rights Reserved &nbsp;|&nbsp; <i
+                            class="fas fa-lock"></i> Proprietary &amp; Confidential</p>
+                </div>
+            </div>
+        </div>
+        <script>document.getElementById('footer-year').textContent = new Date().getFullYear();</script>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

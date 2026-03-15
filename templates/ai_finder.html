@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PixelFoodie | AI Recipe Finder</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+
+        :root { 
+            --bg: #121212; /* Dark theme background */
+            --card: #1a1a1c; 
+            --accent: #ff4757; /* Website Red/Coral color */
+            --accent-hover: #ff6b81;
+            --gold: #f5b041; /* Gold text color */
+            --text: #FFFFFF; 
+            --secondary: #a0a0a0; 
+        }
+        
+        body { 
+            background-color: var(--bg); 
+            color: var(--text); 
+            font-family: 'Poppins', sans-serif; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 50px; 
+            margin: 0; 
+        }
+        
+        /* Heading matching your brand */
+        h1 { font-size: 48px; font-weight: 800; margin-bottom: 10px; letter-spacing: 1px; }
+        .brand-text { color: var(--accent); }
+        .sub-text { color: var(--gold); font-size: 14px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 30px; }
+
+        /* Input & Button (Pill shaped with glow) */
+        input { 
+            background: rgba(255, 255, 255, 0.05); 
+            border: 1px solid #333; 
+            color: white; 
+            padding: 15px 25px; 
+            border-radius: 30px; 
+            width: 400px; 
+            font-size: 16px; 
+            font-family: 'Poppins', sans-serif;
+            outline: none; 
+            transition: 0.3s; 
+        }
+        input:focus { border-color: var(--accent); box-shadow: 0 0 10px rgba(255, 71, 87, 0.2); }
+        
+        button#searchBtn { 
+            background: var(--accent); 
+            color: white; 
+            border: none; 
+            padding: 15px 35px; 
+            border-radius: 30px; 
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600; 
+            font-size: 16px;
+            cursor: pointer; 
+            margin-top: 20px; 
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4); /* Glow effect from your screenshot */
+            transition: 0.3s; 
+        }
+        button#searchBtn:hover { background: var(--accent-hover); transform: translateY(-2px); }
+
+        /* Grid & Cards */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; width: 100%; max-width: 1100px; margin-top: 40px; }
+        .recipe-card { background: var(--card); padding: 25px; border-radius: 20px; border: 1px solid #2a2a2c; cursor: pointer; transition: 0.3s ease; text-align: left; }
+        .recipe-card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        .match-badge { color: var(--gold); font-weight: 700; font-size: 14px; display: block; margin-bottom: 10px; letter-spacing: 1px; }
+
+        /* MODAL STYLE (Pop-up) */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); }
+        .modal-content { background: var(--card); margin: 5% auto; padding: 40px; border-radius: 24px; width: 70%; max-width: 700px; max-height: 80vh; overflow-y: auto; border: 1px solid #333; position: relative; animation: slideUp 0.4s ease; }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .close-btn { position: absolute; right: 25px; top: 20px; font-size: 30px; color: var(--secondary); cursor: pointer; }
+        .modal-btn { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 8px 15px; border-radius: 30px; margin-top: 15px; font-size: 12px; cursor: pointer; font-family: 'Poppins', sans-serif; transition: 0.3s; }
+        .modal-btn:hover { background: var(--accent); color: white; }
+    </style>
+</head>
+<body>
+
+   <a href="/home" class="your-class-names-here" style="text-decoration: none; color: white;">
+   <i class="fas fa-arrow-left"></i> Back to Home
+</a>
+    <h1>PIXEL<span class="brand-text">FOODIE</span></h1>
+    <p class="sub-text">The Gold Standard AI Recipe Finder</p>
+    
+    <input type="text" id="userInput" placeholder="Enter ingredients (e.g. Paneer, Tomato, Onion)">
+    <button id="searchBtn" onclick="searchRecipe()">Find Recipes</button>
+
+    <div class="grid" id="recipeResults"></div>
+
+    <div id="recipeModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle" style="color: var(--accent); font-size: 28px; margin-top: 0;"></h2>
+            <hr style="border: 0.5px solid #333; margin: 20px 0;">
+            <h3 style="color: #fff;">Cooking Instructions:</h3>
+            <p id="modalInstructions" style="color: var(--secondary); line-height: 1.8; font-size: 16px; white-space: pre-wrap;"></p>
+        </div>
+    </div>
+
+    <script>
+        async function searchRecipe() {
+            const container = document.getElementById('recipeResults');
+            const input = document.getElementById('userInput').value;
+            if(!input) return alert("Ingredients type pannunga anna!");
+
+            container.innerHTML = '<p style="color: var(--gold); font-size: 18px; font-weight: 600;">Processing with ML Model...</p>';
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ ingredients: input })
+                });
+                const recipes = await response.json();
+                
+                if (recipes.length === 0) {
+                    container.innerHTML = `
+                        <div style="text-align: center; width: 100%; grid-column: 1 / -1;">
+                            <h3 style="color: var(--accent);">Oops! No matches found 😔</h3>
+                            <p style="color: var(--secondary);">We couldn't find any recipes with "${input}". Please check the spelling or try different ingredients!</p>
+                        </div>`;
+                    return;
+                }
+                
+                container.innerHTML = recipes.map(r => `
+                    <div class="recipe-card" onclick="openModal(\`${r.recipe_name.replace(/'/g, "\\'")}\`, \`${r.instructions.replace(/'/g, "\\'").replace(/"/g, '\\"')}\`)">
+                        <span class="match-badge">${r.match} MATCH</span>
+                        <h3 style="margin: 0 0 10px 0; font-size: 18px;">${r.recipe_name}</h3>
+                        <p style="color: var(--secondary); font-size: 13px;">Click to view full recipe steps...</p>
+                        <button class="modal-btn">How to Cook</button>
+                    </div>
+                `).join('');
+            } catch (error) {
+                container.innerHTML = `<p style="color: var(--accent); text-align: center; width: 100%; grid-column: 1 / -1;">Backend Error! Terminal-ah check pannunga.</p>`;
+            }
+        }
+
+        function openModal(name, instructions) {
+            document.getElementById('modalTitle').innerText = name;
+            document.getElementById('modalInstructions').innerText = instructions;
+            document.getElementById('recipeModal').style.display = "block";
+            document.body.style.overflow = "hidden"; 
+        }
+
+        function closeModal() {
+            document.getElementById('recipeModal').style.display = "none";
+            document.body.style.overflow = "auto";
+        }
+
+        window.onclick = function(event) {
+            let modal = document.getElementById('recipeModal');
+            if (event.target == modal) closeModal();
+        }
+    </script>
+</body>
+</html>

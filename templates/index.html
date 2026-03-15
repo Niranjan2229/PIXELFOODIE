@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PixelFoodie | Premium Recipes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        /* ---- AI Ingredient Matcher Modal ---- */
+        #ai-matcher-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.92);
+            z-index: 10000;
+            overflow-y: auto;
+            animation: matcherFadeIn 0.3s ease;
+        }
+        @keyframes matcherFadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        #ai-matcher-modal .matcher-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px 20px;
+            font-family: 'Poppins', 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+        #ai-matcher-modal .matcher-close-btn {
+            position: fixed;
+            top: 18px; right: 28px;
+            font-size: 32px;
+            color: #a0a0a0;
+            cursor: pointer;
+            background: none;
+            border: none;
+            z-index: 10001;
+            transition: color 0.2s;
+        }
+        #ai-matcher-modal .matcher-close-btn:hover { color: #ff4757; }
+        #ai-matcher-modal h1 { font-size: 42px; font-weight: 800; color: #fff; margin-bottom: 6px; letter-spacing: 1px; }
+        #ai-matcher-modal h1 span { color: #ff4757; }
+        #ai-matcher-modal .sub-text { color: #f5b041; font-size: 13px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 28px; }
+        #ai-matcher-modal #matcherInput {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid #333;
+            color: #fff;
+            padding: 14px 24px;
+            border-radius: 30px;
+            width: min(420px, 90vw);
+            font-size: 16px;
+            font-family: inherit;
+            outline: none;
+            transition: 0.3s;
+        }
+        #ai-matcher-modal #matcherInput:focus { border-color: #ff4757; box-shadow: 0 0 10px rgba(255,71,87,0.25); }
+        #ai-matcher-modal #matcherSearchBtn {
+            background: #ff4757;
+            color: #fff;
+            border: none;
+            padding: 14px 34px;
+            border-radius: 30px;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 18px;
+            box-shadow: 0 4px 15px rgba(255,71,87,0.4);
+            transition: 0.3s;
+        }
+        #ai-matcher-modal #matcherSearchBtn:hover { background: #ff6b81; transform: translateY(-2px); }
+        #ai-matcher-modal .matcher-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1100px;
+            margin-top: 36px;
+        }
+        #ai-matcher-modal .matcher-card {
+            background: #1a1a1c;
+            padding: 24px;
+            border-radius: 20px;
+            border: 1px solid #2a2a2c;
+            cursor: pointer;
+            transition: 0.3s ease;
+            text-align: left;
+        }
+        #ai-matcher-modal .matcher-card:hover { transform: translateY(-5px); border-color: #ff4757; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        #ai-matcher-modal .match-badge { color: #f5b041; font-weight: 700; font-size: 13px; display: block; margin-bottom: 10px; letter-spacing: 1px; }
+        #ai-matcher-modal .matcher-card h3 { margin: 0 0 8px 0; font-size: 17px; color: #fff; }
+        #ai-matcher-modal .matcher-card p { color: #a0a0a0; font-size: 13px; margin: 0; }
+        #ai-matcher-modal .card-btn {
+            background: transparent;
+            border: 1px solid #ff4757;
+            color: #ff4757;
+            padding: 7px 14px;
+            border-radius: 30px;
+            margin-top: 14px;
+            font-size: 12px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: 0.3s;
+        }
+        #ai-matcher-modal .card-btn:hover { background: #ff4757; color: #fff; }
+        /* Recipe detail sub-modal */
+        #matcher-detail-modal {
+            display: none;
+            position: fixed;
+            z-index: 10100;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+        }
+        #matcher-detail-modal .detail-content {
+            background: #1a1a1c;
+            margin: 5% auto;
+            padding: 40px;
+            border-radius: 24px;
+            width: 70%;
+            max-width: 700px;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid #333;
+            position: relative;
+            animation: slideUp 0.4s ease;
+        }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        #matcher-detail-modal .detail-close { position: absolute; right: 25px; top: 20px; font-size: 28px; color: #a0a0a0; cursor: pointer; }
+        #matcher-detail-modal .detail-close:hover { color: #ff4757; }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Copyright & Ownership Meta Tags -->
+    <meta name="author" content="NIRANJAN ANANDAN">
+    <meta name="owner" content="NIRANJAN ANANDAN">
+    <meta name="copyright" content="© 2025 PixelFoodie — NIRANJAN ANANDAN. All Rights Reserved.">
+    <meta name="robots" content="index, follow">
+    
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="/home" class="logo">PIXELFOODIE</a>
+                <div class="nav-links">
+                    <a href="/home" class="active"><i class="fas fa-home"></i> Home</a>
+                    <a href="/recipes.html"><i class="fas fa-utensils"></i> Recipes</a>
+                    <div class="dropdown">
+                        <a href="#" class="dropbtn"><i class="fas fa-fire"></i> Popular <i
+                                class="fas fa-caret-down"></i></a>
+                        <div class="dropdown-content" id="popular-dropdown">
+                            <!-- Dynamic content will be loaded here -->
+                        </div>
+                    </div>
+                    <a href="/about.html"><i class="fas fa-info-circle"></i> About</a>
+                    <button id="theme-toggle" class="btn-icon" aria-label="Toggle Theme">
+                        <!-- Moon Icon (Visible in Dark Mode) -->
+                        <i class="fas fa-moon icon-moon"></i>
+                        <!-- Sun Icon (Visible in Light Mode) -->
+                        <i class="fas fa-sun icon-sun"></i>
+                    </button>
+                </div>
+                <!-- Optional: Theme Toggle could go here -->
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container" style="display:flex; width:100%; align-items:center;">
+                <div class="hero-content">
+    <span class="hero-tag">THE GOLD STANDARD RECIPES</span>
+    <h1>Taste the Magic of <br><span>Pixel Perfect</span> Food</h1>
+    <p>Master the art of the professional kitchen. Discover authentic restaurant secrets and time-honored recipes delivered to your table.</p>
+    
+    <div class="hero-actions" style="display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
+        <a href="#recipes" class="btn btn-primary">Explore Recipes</a>
+        
+        <button onclick="openAI()" class="btn btn-primary">✨ Try AI Recipe Finder</button>
+        
+        <button onclick="openMatcher()" class="btn btn-primary" style="margin-top: 15px;">🧠 AI Ingredient Matcher</button>
+    </div>
+</div>
+                <div class="hero-image">
+                    <div class="hero-img-inner">
+                        <!-- Placeholder until image generation works. Using a solid color block with text for now if image missing -->
+                        <img src="/static/assets/pixel_foodie_hero.jpg" alt="PixelFoodie Hero Logo" onerror="this.src='https://placehold.co/600x600/1E1E1E/FFF?text=PixelFoodie+Hero'">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="recipes" class="recipes-section">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-title">
+                        <h2>Featured Recipes</h2>
+                        <p>Hand-picked recipes just for you</p>
+                    </div>
+                    <div class="search-bar">
+                        <input type="text" id="searchInput" placeholder="Search recipes...">
+                        <button id="voiceSearchBtn" class="btn-icon" aria-label="Voice Search"
+                            style="margin-right: 5px;">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                        <span style="font-size: 1.2rem; cursor: pointer;">🔍</span>
+                    </div>
+                </div>
+
+                <div class="recipe-grid" id="recipeGrid">
+                    <!-- Recipes will be injected here via JS -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <span class="footer-logo">PIXELFOODIE</span>
+                    <p class="footer-tagline">Master the art of the professional kitchen.</p>
+                </div>
+                <div class="footer-copy">
+                    <p>&copy; <span id="footer-year"></span> <strong>PixelFoodie</strong> &mdash; Created &amp; Owned by
+                        <strong>NIRANJAN ANANDAN</strong>
+                    </p>
+                    <p class="footer-legal">All content, design, code &amp; assets are the exclusive property of
+                        NIRANJAN ANANDAN.<br>Unauthorized copying, redistribution or use is strictly prohibited.</p>
+                    <p class="footer-rights"><i class="fas fa-shield-alt"></i> All Rights Reserved &nbsp;|&nbsp; <i
+                            class="fas fa-lock"></i> Proprietary &amp; Confidential</p>
+                    <div id="ai-modal"
+                        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; justify-content:center; align-items:center;">
+                        <div
+                            style="position:relative; width:90%; max-width:450px; background:#1c1c1e; border-radius:20px; padding:15px;">
+                            <button onclick="closeAI()"
+                                style="position:absolute; right:15px; top:15px; color:white; background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
+                            <iframe src="https://pixelfoodie-ml-api-1.onrender.com" width="100%" height="600px"
+                                style="border:none; border-radius:15px;"></iframe>
+                        </div>
+                    </div>
+
+                    <!-- ===== AI INGREDIENT MATCHER MODAL (same-page) ===== -->
+                    <div id="ai-matcher-modal">
+                        <button class="matcher-close-btn" onclick="closeMatcher()">&times;</button>
+                        <div class="matcher-wrap">
+                            <h1>PIXEL<span>FOODIE</span></h1>
+                            <p class="sub-text">🧠 AI Ingredient Matcher</p>
+                            <input type="text" id="matcherInput" placeholder="Enter ingredients (e.g. Paneer, Tomato, Onion)">
+                            <button id="matcherSearchBtn" onclick="runMatcher()">Find Recipes</button>
+                            <div class="matcher-grid" id="matcherResults"></div>
+                        </div>
+                    </div>
+
+                    <!-- Recipe detail popup inside matcher -->
+                    <div id="matcher-detail-modal">
+                        <div class="detail-content">
+                            <span class="detail-close" onclick="closeMatcherDetail()">&times;</span>
+                            <h2 id="matcherModalTitle" style="color:#ff4757; font-size:26px; margin-top:0;"></h2>
+                            <hr style="border:0.5px solid #333; margin:18px 0;">
+                            <h3 style="color:#fff;">Cooking Instructions:</h3>
+                            <p id="matcherModalInstructions" style="color:#a0a0a0; line-height:1.8; font-size:15px; white-space:pre-wrap;"></p>
+                        </div>
+                    </div>
+
+                    <script>
+                        function openAI()  { document.getElementById('ai-modal').style.display = 'flex'; }
+                        function closeAI() { document.getElementById('ai-modal').style.display = 'none'; }
+
+                        function openMatcher() {
+                            document.getElementById('ai-matcher-modal').style.display = 'block';
+                            document.body.style.overflow = 'hidden';
+                        }
+                        function closeMatcher() {
+                            document.getElementById('ai-matcher-modal').style.display = 'none';
+                            document.body.style.overflow = 'auto';
+                            document.getElementById('matcherResults').innerHTML = '';
+                            document.getElementById('matcherInput').value = '';
+                        }
+
+                        async function runMatcher() {
+                            const container = document.getElementById('matcherResults');
+                            const input = document.getElementById('matcherInput').value.trim();
+                            if (!input) return alert('Please enter some ingredients!');
+
+                            container.innerHTML = '<p style="color:#f5b041;font-size:17px;font-weight:600;text-align:center;grid-column:1/-1;">🔍 Processing with ML Model...</p>';
+
+                            try {
+                                const res = await fetch('/predict', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ ingredients: input })
+                                });
+                                const recipes = await res.json();
+
+                                if (recipes.length === 0) {
+                                    container.innerHTML = `<div style="text-align:center;width:100%;grid-column:1/-1;">
+                                        <h3 style="color:#ff4757;">No matches found 😔</h3>
+                                        <p style="color:#a0a0a0;">Try different ingredients or check your spelling!</p>
+                                    </div>`;
+                                    return;
+                                }
+
+                                container.innerHTML = recipes.map(r => {
+                                    const safeName = r.recipe_name.replace(/`/g, "'");
+                                    const safeInst = r.instructions.replace(/`/g, "'");
+                                    return `<div class="matcher-card" onclick="openMatcherDetail(\`${safeName}\`, \`${safeInst}\`)">
+                                        <span class="match-badge">${r.match} MATCH</span>
+                                        <h3>${r.recipe_name}</h3>
+                                        <p>Click to view full recipe steps...</p>
+                                        <button class="card-btn">How to Cook</button>
+                                    </div>`;
+                                }).join('');
+                            } catch (err) {
+                                container.innerHTML = '<p style="color:#ff4757;text-align:center;grid-column:1/-1;">Backend Error! Please check the server.</p>';
+                            }
+                        }
+
+                        function openMatcherDetail(name, instructions) {
+                            document.getElementById('matcherModalTitle').innerText = name;
+                            document.getElementById('matcherModalInstructions').innerText = instructions;
+                            document.getElementById('matcher-detail-modal').style.display = 'block';
+                        }
+                        function closeMatcherDetail() {
+                            document.getElementById('matcher-detail-modal').style.display = 'none';
+                        }
+                        window.addEventListener('click', function(e) {
+                            if (e.target === document.getElementById('matcher-detail-modal')) closeMatcherDetail();
+                        });
+
+                        // Close matcher modal on Enter key
+                        document.getElementById('matcherInput') && document.getElementById('matcherInput').addEventListener('keydown', function(e) {
+                            if (e.key === 'Enter') runMatcher();
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+        <script>document.getElementById('footer-year').textContent = new Date().getFullYear();</script>
+    </footer>
+
+    <script src="/static/script.js"></script>
+</body>
+
+</html>
