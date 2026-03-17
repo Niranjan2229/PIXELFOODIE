@@ -1,15 +1,16 @@
 Welcome to PIXELFOODIE, an intelligent and interactive food recipe platform designed to bring authentic culinary experiences right to your screen! 
 
 ✨ Key Features
-🔐 Secure Authentication: Seamless Google and Facebook login integration powered by Firebase Authentication.
+🔐 Secure Authentication: Seamless Google login integration powered by Firebase Authentication.
 🧠 PixelMood AI: An integrated custom Machine Learning model that analyzes text to suggest the perfect recipe based on your current mood! 
 📱 Beautiful UI: A clean, responsive, and user-friendly interface built for food lovers.
 
 🛠️ Tech Stack
-Frontend: HTML, CSS, JavaScript
-Backend: Firebase (Authentication)
+Frontend: HTML5, CSS3, JavaScript
+Backend $ ML: Python (Flask), Scikit-learn (Machine Learning Model), Pandas / NumPy (Data Processing)
 Security: Firebase (Authentication)
 AI/ML Integration: Python (Text-based ML model deployment)
+Deployment: Render (Cloud Hosting for Python Web Service)
 
 🚀 How to Run Locally
 1. Clone this repository to your local machine.
@@ -19,10 +20,10 @@ AI/ML Integration: Python (Text-based ML model deployment)
 
 👨‍💻 Developed By
 NIRANJAN ANANDAN 
-B.Sc. Artificial Intelligence and Machine Learning
-Rathinavel Subramanian College of Arts and Science,Sulur,Coimbatore
+          ~ B.Sc. Artificial Intelligence and Machine Learning
+          ~ Rathinavel Subramanian College of Arts and Science,Sulur,Coimbatore
 CONTACT : 
-Gmail: niranjannj2229@gmail.com
-GITHUB: https://github.com/Niranjan2229
-LinkedIn: www.linkedin.com/in/niranjan-anandan
+          Gmail: niranjannj2229@gmail.com
+          GITHUB: https://github.com/Niranjan2229
+          LinkedIn: www.linkedin.com/in/niranjan-anandan
           
